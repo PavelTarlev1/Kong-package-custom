@@ -1,0 +1,1 @@
+{"version":3,"file":"providers.js","sourceRoot":"","sources":["../../src/kong.provider/providers.ts"],"names":[],"mappings":";;;AAAA,MAAa,aAAa;;AAA1B,sCAUC;AATU,0BAAY,GAAG,OAAO,CAAC,GAAG,CAAC,iBAAiB,IAAI,MAAM,CAAC;AAEvD,0BAAY,GAAG,OAAO,CAAC,GAAG,CAAC,YAAY,IAAI,MAAM,CAAC;AAElD,0BAAY,GAAG,OAAO,CAAC,GAAG,CAAC,YAAY,IAAI,cAAc,CAAC;AAE1D,uBAAS,GAAG,EAAE,CAAC;AAEf,wBAAU,GAAI,EAAE,CAAC"}
