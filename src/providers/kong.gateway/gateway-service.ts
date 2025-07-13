@@ -90,7 +90,7 @@ export class GatewayService {
             name: route.name,
             service: { name: this.serviceName },
             methods: [route.method],
-            paths: [`/api/${route.path}`.replace(/\/+/g, "/")],
+            paths: [`/${route.path}`.replace(/\/+/g, "/")],
             strip_path: false,
         };
     }

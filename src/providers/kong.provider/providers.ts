@@ -5,7 +5,4 @@ export class KongProviders {
 
     static SERVICE_NAME = process.env.SERVICE_NAME || 'user-service';
 
-    static AUTH_PORT = 80;
-
-    static testString  = '';
 }

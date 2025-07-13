@@ -44,6 +44,6 @@ export function ControllerDecorator(path: string): ClassDecorator {
         path: `/${path}/${route}`,
       });
     });
-    Controller(`/api/${path}`.replace('//', '/'))(target);
+    Controller(`/${path}`.replace('//', '/'))(target);
   };
 }
