@@ -42,10 +42,8 @@ export function ControllerDecorator(path: string): ClassDecorator {
         method,
         auth,
         path: `/${path}/${route}`,
-        service: process.env.SERVICE_NAME!,
       });
     });
-
-    Controller(`/api/${process.env.SERVICE_NAME}/${path}`.replace('//', '/'))(target);
+    Controller(`/api/${path}`.replace('//', '/'))(target);
   };
 }

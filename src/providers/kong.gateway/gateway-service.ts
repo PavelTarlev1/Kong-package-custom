@@ -6,7 +6,7 @@ import { JwtKongPostRequest, Route, RoutesKongUpdateCreateRequest } from "../kon
 export class GatewayService {
     private static readonly logger = new Logger(GatewayService.name);
 
-    private static authPort: number = KongProviders.AUTH_PORT;
+    private static authPort: number;
     private static serviceName: string = KongProviders.SERVICE_NAME;
     private static kongGateway: string = KongProviders.GATEWAY_NAME;
     private static kongPort: string = KongProviders.GATEWAY_PORT;
@@ -17,7 +17,8 @@ export class GatewayService {
         GatewayService.routes.push(route);
     }
 
-    public static async gatewayExecution() {
+    public static async gatewayExecution(portFromMain: number) {
+        this.authPort = portFromMain;
         this.logger.log(`Starting Kong gateway registration for service: ${this.serviceName}`);
         try {
             await this.kongServiceCreate();
@@ -89,7 +90,7 @@ export class GatewayService {
             name: route.name,
             service: { name: this.serviceName },
             methods: [route.method],
-            paths: [`/api/${process.env.SERVICE_NAME}/${route.path}`.replace(/\/+/g, "/")],
+            paths: [`/api/${route.path}`.replace(/\/+/g, "/")],
             strip_path: false,
         };
     }

@@ -34,10 +34,9 @@ function ControllerDecorator(path) {
                 method,
                 auth,
                 path: `/${path}/${route}`,
-                service: process.env.SERVICE_NAME,
             });
         });
-        (0, common_1.Controller)(`/api/${process.env.SERVICE_NAME}/${path}`.replace('//', '/'))(target);
+        (0, common_1.Controller)(`/api/${path}`.replace('//', '/'))(target);
     };
 }
 //# sourceMappingURL=user.controller-decorator.js.map

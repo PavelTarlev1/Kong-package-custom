@@ -7,7 +7,7 @@ export declare class GatewayService {
     private static kongPort;
     private static routes;
     static addRoute(route: Route): void;
-    static gatewayExecution(): Promise<void>;
+    static gatewayExecution(portFromMain: number): Promise<void>;
     private static kongServiceCreate;
     private static createUpdateGatewayRoute;
     private static gatewayPluginsJWT;

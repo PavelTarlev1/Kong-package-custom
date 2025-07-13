@@ -12,7 +12,8 @@ class GatewayService {
         this.logger.log(`Registering route in memory: ${route.name}`);
         GatewayService.routes.push(route);
     }
-    static async gatewayExecution() {
+    static async gatewayExecution(portFromMain) {
+        this.authPort = portFromMain;
         this.logger.log(`Starting Kong gateway registration for service: ${this.serviceName}`);
         try {
             await this.kongServiceCreate();
@@ -75,7 +76,7 @@ class GatewayService {
             name: route.name,
             service: { name: this.serviceName },
             methods: [route.method],
-            paths: [`/api/${process.env.SERVICE_NAME}/${route.path}`.replace(/\/+/g, "/")],
+            paths: [`/api/${route.path}`.replace(/\/+/g, "/")],
             strip_path: false,
         };
     }
@@ -115,7 +116,6 @@ class GatewayService {
 }
 exports.GatewayService = GatewayService;
 GatewayService.logger = new common_1.Logger(GatewayService.name);
-GatewayService.authPort = providers_1.KongProviders.AUTH_PORT;
 GatewayService.serviceName = providers_1.KongProviders.SERVICE_NAME;
 GatewayService.kongGateway = providers_1.KongProviders.GATEWAY_NAME;
 GatewayService.kongPort = providers_1.KongProviders.GATEWAY_PORT;
