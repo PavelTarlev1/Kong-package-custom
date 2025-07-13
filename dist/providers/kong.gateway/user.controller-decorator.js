@@ -36,7 +36,7 @@ function ControllerDecorator(path) {
                 path: `/${path}/${route}`,
             });
         });
-        (0, common_1.Controller)(`/api/${path}`.replace('//', '/'))(target);
+        (0, common_1.Controller)(`/${path}`.replace('//', '/'))(target);
     };
 }
 //# sourceMappingURL=user.controller-decorator.js.map
