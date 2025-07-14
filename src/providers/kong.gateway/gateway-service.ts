@@ -72,9 +72,22 @@ export class GatewayService {
                 const dto = this.mapJwtToRoute(route);
                 const url = `http://${this.kongGateway}:${this.kongPort}/plugins`;
 
-                this.logger.log(`Attaching JWT plugin to route '${route.name}'`);
+                this.logger.log(`Checking for existing JWT plugin on route '${route.name}'`);
 
                 try {
+                    const existingPluginsUrl = `http://${this.kongGateway}:${this.kongPort}/routes/${route.name}/plugins`;
+                    const { data } = await axios.get(existingPluginsUrl);
+
+                    const jwtPluginExists = data.data.some(
+                        (plugin: any) => plugin.name === "jwt"
+                    );
+
+                    if (jwtPluginExists) {
+                        this.logger.log(`JWT plugin already exists for route '${route.name}', skipping.`);
+                        return;
+                    }
+
+                    this.logger.log(`Attaching JWT plugin to route '${route.name}'`);
                     await axios.post(url, dto);
                     this.logger.log(`JWT plugin attached to route '${route.name}'`);
                 } catch (err: any) {
