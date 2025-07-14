@@ -55,22 +55,26 @@ class GatewayService {
         }));
     }
     static async gatewayPluginsJWT() {
+        const baseUrl = `http://${this.kongGateway}:${this.kongPort}`;
         await Promise.all(this.routes.map(async (route) => {
             if (!route.auth)
                 return;
-            const dto = this.mapJwtToRoute(route);
-            const url = `http://${this.kongGateway}:${this.kongPort}/plugins`;
-            this.logger.log(`Checking for existing JWT plugin on route '${route.name}'`);
             try {
-                const existingPluginsUrl = `http://${this.kongGateway}:${this.kongPort}/routes/${route.name}/plugins`;
-                const { data } = await axios_1.default.get(existingPluginsUrl);
-                const jwtPluginExists = data.data.some((plugin) => plugin.name === "jwt");
+                // Step 1: Get route ID by name
+                const { data: routeInfo } = await axios_1.default.get(`${baseUrl}/routes/${route.name}`);
+                const routeId = routeInfo.id;
+                this.logger.log(`Checking for existing JWT plugin on route '${route.name}' (id: ${routeId})`);
+                // Step 2: Check existing plugins on that route
+                const { data: pluginsInfo } = await axios_1.default.get(`${baseUrl}/routes/${routeId}/plugins`);
+                const jwtPluginExists = pluginsInfo.data.some((plugin) => plugin.name === "jwt");
                 if (jwtPluginExists) {
                     this.logger.log(`JWT plugin already exists for route '${route.name}', skipping.`);
                     return;
                 }
+                // Step 3: Attach plugin
+                const dto = this.mapJwtToRoute(routeId);
                 this.logger.log(`Attaching JWT plugin to route '${route.name}'`);
-                await axios_1.default.post(url, dto);
+                await axios_1.default.post(`${baseUrl}/plugins`, dto);
                 this.logger.log(`JWT plugin attached to route '${route.name}'`);
             }
             catch (err) {
@@ -88,7 +92,7 @@ class GatewayService {
             strip_path: false,
         };
     }
-    static mapJwtToRoute(route) {
+    static mapJwtToRoute(routeId) {
         return {
             name: "jwt",
             config: {
@@ -96,7 +100,7 @@ class GatewayService {
                 claims_to_verify: ["exp"],
             },
             enabled: true,
-            route: { name: route.name },
+            route: { id: routeId },
         };
     }
     static responseError(response) {

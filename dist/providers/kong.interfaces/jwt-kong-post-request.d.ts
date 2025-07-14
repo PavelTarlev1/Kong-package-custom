@@ -6,6 +6,7 @@ export interface JwtKongPostRequest {
     };
     enabled: boolean;
     route: {
-        name: string;
+        id?: string;
+        name?: string;
     };
 }
